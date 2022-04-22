@@ -53,8 +53,9 @@ const SignInPage = () => {
 
     useEffect(() => {
         // if(!userInfo.email) navigate("/sign-up")
+        console.log(userInfo)
         if(userInfo?.email) navigate("/")
-    }, [])
+    }, [userInfo])
 
     const handleSignIn = async (values) => {
         if (!isValid) return;
