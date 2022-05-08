@@ -1,9 +1,8 @@
-import { signOut } from "firebase/auth";
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import Header from "../components/layout/Header";
-import { useAuth } from "../contexts/auth-context";
-import { auth } from "../firebase/firebase-config";
+import React from "react";
+import Layout from "../components/layout/Layout";
+import HomeBanner from "../components/module/home/HomeBanner";
+import HomeFeature from "../components/module/home/HomeFeature";
+import HomeNewest from "../components/module/home/HomeNewest";
 
 const HomePage = () => {
     
@@ -14,7 +13,11 @@ const HomePage = () => {
     // });
     return (
         <div>
-            <Header />
+            <Layout>
+                <HomeBanner />
+                <HomeFeature />
+                <HomeNewest />
+            </Layout>
         </div>
     );
 };

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;0,500;0,600;0,700;1,400;1,500&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;0,500;0,600;0,700;1,400;1,500&display=swap");
 
 *,
 *::before,
@@ -57,3 +57,31 @@ h6 {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.home-block {
+    @apply pb-4 mt-8;
+    @media screen and (min-width: 1024px) {
+        @apply pb-[60px] mt-10;
+    }
+}
+
+.grid-layout {
+    @media screen and (min-width: 1024px) {
+        @apply grid grid-cols-3 gap-12;
+    }
+    &--primary {
+        @apply auto-cols-[220px];
+        @media screen and (min-width: 1024px) {
+            @apply grid-cols-4;
+        }
+    }
+}
+
+.title {
+    &-big {
+        font-size: 22px;
+        line-height: 28px;
+        font-weight: 600;
+        color: #232323;
+    }
+}

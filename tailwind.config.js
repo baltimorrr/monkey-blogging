@@ -1,6 +1,6 @@
 module.exports = {
   content: [
-    "./src/**/*.{js,jsx,ts,tsx}",
+    "./src/**/*.{html,js,jsx,ts,tsx}",
   ],
   theme: {
     colors: {
@@ -10,7 +10,11 @@ module.exports = {
       'grayLight': '#E7ECF3',
       'white': '#FFF',
       'black': '#000',
+      'tertiary': '#3A1097',
+      'accent': '#00D1ED',
       'transparent': 'transparent',
+      'current': 'currentColor',
+      'inherit': 'inherit',
     },
     extend: {},
   },
