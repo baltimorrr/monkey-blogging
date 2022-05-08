@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Input from "../components/input/Input";
 import Label from "../components/label/Label";
-import IconEyeClose from "../components/icon/IconEyeClose";
 import Field from "../components/field/Field";
-import IconEyeOpen from "../components/icon/IconEyeOpen";
 import Button from "../components/button/Button";
 
 import * as yup from "yup";
@@ -15,6 +13,7 @@ import { auth, db } from "../firebase/firebase-config";
 import { NavLink, useNavigate } from "react-router-dom";
 import { addDoc, collection } from "firebase/firestore";
 import AuthenticationPage from "./AuthenticationPage";
+import InputPasswordToggle from "../components/input/InputPasswordToggle";
 
 const schema = yup.object({
     fullname: yup.string().required("Please enter your fullname"),
@@ -116,22 +115,7 @@ const SignUpPage = () => {
                     >
                         Password
                     </Label>
-                    <Input
-                        type={togglePassword ? `text` : "password"}
-                        name="password"
-                        placeholder="Enter your password"
-                        control={control}
-                    >
-                        {togglePassword ? (
-                            <IconEyeOpen
-                                onClick={() => setTogglePassword(false)}
-                            />
-                        ) : (
-                            <IconEyeClose
-                                onClick={() => setTogglePassword(true)}
-                            />
-                        )}
-                    </Input>
+                    <InputPasswordToggle control={control} />
                 </Field>
                 <div className="mb-5">
                     Have you already have an account?{" "}
