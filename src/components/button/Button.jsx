@@ -18,6 +18,8 @@ const Button = ({
                     {...props}
                     className={`${
                         props.height === "55px" ? "h-[55px]" : "h-[66px]"
+                    } ${
+                        props.height === "52px" ? "h-[52px]" : "h-[66px]"
                     } cursor-pointer px-6 leading-none ${
                         props.kind === "secondary"
                             ? "text-primary bg-white"
