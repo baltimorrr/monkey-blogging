@@ -1,0 +1,41 @@
+@media screen and (max-width: 1023.98px) {
+    .post {
+        &-header {
+            flex-direction: column;
+        }
+        &-feature {
+            height: auto;
+        }
+        &-heading {
+            font-size: 26px;
+        }
+        &-content {
+            margin: 40px 0;
+        }
+        &-container {
+            padding-bottom: 40px;
+        }
+    }
+    .author {
+        flex-direction: column;
+        &-image {
+            width: 100%;
+            height: auto;
+        }
+    }
+}
+
+@media screen and (max-width: 1023.98px) {
+    .entry-content {
+        font-size: 14px;
+        h2 {
+            font-size: 26px;
+        }
+        h3 {
+            font-size: 24px;
+        }
+        h4 {
+            font-size: 20px;
+        }
+    }
+}
