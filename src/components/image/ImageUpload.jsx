@@ -38,7 +38,7 @@ const ImageUpload = (props) => {
                 <>
                     <img
                         src={image}
-                        className="w-full h-full object-cover"
+                        className="w-[355px] h-[200px] object-cover"
                         alt=""
                     />
                     <button
