@@ -1,6 +1,5 @@
 import React from "react";
 import { useController } from "react-hook-form";
-import IconEyeOpen from "../icon/IconEyeOpen";
 
 const Input = ({ name = "", type = "text", children, control, ...props }) => {
     const { field } = useController({
