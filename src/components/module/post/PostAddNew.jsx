@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Field from "../../../components/field/Field";
 import Label from "../../../components/label/Label";
 import Input from "../../../components/input/Input";
@@ -11,9 +11,10 @@ import ImageUpload from "../../image/ImageUpload";
 
 import { useForm } from "react-hook-form";
 import slugify from "slugify";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, where, getDocs, query } from "firebase/firestore";
 import { db } from "../../../firebase/firebase-config";
 import useFirebaseImage from "../../hooks/useFirebaseImage";
+import Toggle from "../../toggle/Toggle";
 
 const PostAddNew = () => {
     const { control, watch, setValue, handleSubmit, getValues } = useForm({
@@ -24,10 +25,12 @@ const PostAddNew = () => {
             status: 2,
             category: "",
             author: "",
+            hot: false,
         },
     });
     const watchStatus = watch("status");
     const watchCategory = watch("category");
+    const watchHot = watch("hot");
 
     const addPostHandler = async (values) => {
         const cloneValues = { ...values };
@@ -43,6 +46,23 @@ const PostAddNew = () => {
 
     const { image, progress, handleSelectImage, handleDeleteImage } =
         useFirebaseImage(setValue, getValues);
+
+    useEffect(() => {
+        async function getData() {
+            const colRef = collection(db, "categories");
+            const q = query(colRef, where("status", "==", 1));
+            const querySnapshot = await getDocs(q);
+            let results = [];
+            querySnapshot.forEach((doc) => {
+                results.push({
+                    id: doc.id,
+                    ...doc.data(),
+                });
+            });
+            console.log(results);
+        }
+        getData();
+    }, []);
 
     return (
         <div>
@@ -77,6 +97,33 @@ const PostAddNew = () => {
                             image={image}
                             handleDeleteImage={handleDeleteImage}
                         ></ImageUpload>
+                    </Field>
+                    <Field>
+                        <Label>Category</Label>
+                        <Dropdown>
+                            <Option>Knowledge</Option>
+                            <Option>Blockchain</Option>
+                            <Option>Setup</Option>
+                            <Option>Nature</Option>
+                            <Option>Developer</Option>
+                        </Dropdown>
+                    </Field>
+                    <Field>
+                        <Label>Author</Label>
+                        <Input
+                            control={control}
+                            placeholder="Find the author"
+                            name="author"
+                        ></Input>
+                    </Field>
+                </div>
+                <div className="grid grid-cols-2 gap-x-10 mb-10">
+                    <Field>
+                        <Label>Feature post</Label>
+                        <Toggle
+                            on={watchHot === true}
+                            onClick={() => setValue("hot", !watchHot)}
+                        ></Toggle>
                     </Field>
                     <Field>
                         <Label>Status</Label>
@@ -116,27 +163,6 @@ const PostAddNew = () => {
                             </Radio>
                         </div>
                     </Field>
-                    <Field>
-                        <Label>Author</Label>
-                        <Input
-                            control={control}
-                            placeholder="Find the author"
-                            name="author"
-                        ></Input>
-                    </Field>
-                </div>
-                <div className="grid grid-cols-2 gap-x-10 mb-10">
-                    <Field>
-                        <Label>Category</Label>
-                        <Dropdown>
-                            <Option>Knowledge</Option>
-                            <Option>Blockchain</Option>
-                            <Option>Setup</Option>
-                            <Option>Nature</Option>
-                            <Option>Developer</Option>
-                        </Dropdown>
-                    </Field>
-                    <Field></Field>
                 </div>
                 <Button type="submit" className="mx-auto">
                     Add new post
