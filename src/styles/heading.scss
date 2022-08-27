@@ -1,6 +1,6 @@
 .heading {
-    @apply text-tertiary text-[28px] relative mb-[30px];
-    &::before {
-       @apply content-[""] w-[50px] h-1 bg-accent absolute top-0 left-0 translate-x-0 -translate-y-[150%];
-    }
+  @apply text-tertiary text-[28px] relative mb-[30px];
+  &::before {
+    @apply content-[""] w-[50px] h-1 bg-accent absolute top-0 left-0 translate-x-0 -translate-y-[150%];
+  }
 }

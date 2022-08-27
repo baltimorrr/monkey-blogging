@@ -1,20 +1,21 @@
 table {
-    width: 100%;
-    border-radius: 8px;
+  width: 100%;
+  border-radius: 8px;
 }
 thead {
-    background-color: #f7f7f8;
-    border-radius: inherit;
+  background-color: #f7f7f8;
+  border-radius: inherit;
 }
-th, td {
-    border-radius: inherit;
-    vertical-align: middle;
+th,
+td {
+  border-radius: inherit;
+  vertical-align: middle;
 }
 th {
-    padding: 20px 30px;
-    font-weight: 600;
-    text-align: left;
+  padding: 20px 30px;
+  font-weight: 600;
+  text-align: left;
 }
 td {
-    padding: 15px 30px;
+  padding: 15px 30px;
 }
