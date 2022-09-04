@@ -1,9 +1,16 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
+
 import DashboardHeader from "./DashboardHeader";
 import Sidebar from "./Sidebar";
+import NotFoundPage from "../../../pages/NotFoundPage";
+
+import { useAuth } from "../../../contexts/auth-context";
 
 const DashBoardLayout = ({ children }) => {
+  const {userInfo} = useAuth()
+  if(!userInfo) return <NotFoundPage />
+
   return (
     <div className="max-w-[1600px] mx-auto my-0">
       <DashboardHeader></DashboardHeader>

@@ -17,8 +17,8 @@ const Toggle = ({ on, onClick, ...rest }) => {
         {...rest}
       >
         <span
-          className={`transition-all w-[34px] h-[34px] bg-white rounded-full inline-block ${
-            on ? "translate-x-[32px]" : ""
+          className={`transition-all w-[33px] h-[33px] bg-white rounded-full inline-block ${
+            on ? "translate-x-[34px]" : ""
           }`}
         ></span>
       </div>

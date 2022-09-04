@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+
 import Field from "../../../components/field/Field";
 import Label from "../../../components/label/Label";
 import Input from "../../../components/input/Input";
@@ -6,24 +7,30 @@ import Button from "../../button/Button";
 import Radio from "../../checkbox/Radio";
 import Option from "../../dropdown/Option";
 import Dropdown from "../../dropdown/Dropdown";
-import { postStatus } from "../../../utils/constants";
+import Toggle from "../../toggle/Toggle";
+import Select from "../../dropdown/Select";
+import List from "../../dropdown/List";
 import ImageUpload from "../../image/ImageUpload";
 
 import { useForm } from "react-hook-form";
-import slugify from "slugify";
+import { useAuth } from "../../../contexts/auth-context";
+
 import { collection, addDoc, where, getDocs, query } from "firebase/firestore";
 import { db } from "../../../firebase/firebase-config";
 import useFirebaseImage from "../../hooks/useFirebaseImage";
-import Toggle from "../../toggle/Toggle";
+
+import slugify from "slugify";
+import { postStatus } from "../../../utils/constants";
+import { toast } from "react-toastify";
 
 const PostAddNew = () => {
-  const { control, watch, setValue, handleSubmit, getValues } = useForm({
+  const { control, watch, setValue, handleSubmit, getValues, reset } = useForm({
     mode: "onChange",
     defaultValues: {
       title: "",
       slug: "",
       status: 2,
-      category: "",
+      categoryId: "",
       author: "",
       hot: false,
     },
@@ -31,20 +38,45 @@ const PostAddNew = () => {
   const watchStatus = watch("status");
   const watchHot = watch("hot");
 
-  const addPostHandler = async (values) => {
-    const cloneValues = { ...values };
-    cloneValues.slug = slugify(values.slug || values.title); // slugify chinh no hoac title
-    cloneValues.status = Number(values.status);
-    const colRef = collection(db, "posts");
-    await addDoc(colRef, {
-      image,
-    });
-    console.log(cloneValues);
-    // handleUploadImage(cloneValues.image)
-  };
+  const { userInfo } = useAuth();
 
   const { image, progress, handleSelectImage, handleDeleteImage } =
     useFirebaseImage(setValue, getValues);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState({});
+
+  const addPostHandler = async (values) => {
+    const cloneValues = { ...values };
+    cloneValues.slug = slugify(values.slug || values.title, { lower: true }); // slugify chinh no hoac title
+    cloneValues.status = Number(values.status);
+
+    const colRef = collection(db, "posts");
+    await addDoc(colRef, {
+      ...cloneValues,
+      image,
+      userId: userInfo.uid,
+    });
+
+    toast.success("Create new post success!");
+
+    reset({
+      title: "",
+      slug: "",
+      status: 2,
+      categoryId: "",
+      author: "",
+      hot: false,
+    });
+
+    setSelectedCategory({});
+
+    console.log(cloneValues);
+  };
+
+  const handleClickOption = (item) => {
+    setValue("categoryId", item.id);
+    setSelectedCategory(item);
+  };
 
   useEffect(() => {
     async function getData() {
@@ -58,7 +90,7 @@ const PostAddNew = () => {
           ...doc.data(),
         });
       });
-      console.log(results);
+      setCategories(results);
     }
     getData();
   }, []);
@@ -78,6 +110,7 @@ const PostAddNew = () => {
               name="title"
             ></Input>
           </Field>
+
           <Field>
             <Label>Slug</Label>
             <Input
@@ -87,6 +120,7 @@ const PostAddNew = () => {
             ></Input>
           </Field>
         </div>
+
         <div className="grid grid-cols-2 gap-x-10 mb-10">
           <Field>
             <Label>Image</Label>
@@ -97,16 +131,31 @@ const PostAddNew = () => {
               handleDeleteImage={handleDeleteImage}
             ></ImageUpload>
           </Field>
+
           <Field>
             <Label>Category</Label>
             <Dropdown>
-              <Option>Knowledge</Option>
-              <Option>Blockchain</Option>
-              <Option>Setup</Option>
-              <Option>Nature</Option>
-              <Option>Developer</Option>
+              <Select placeholder="Select the category"></Select>
+              <List>
+                {categories.length > 0 &&
+                  (categories || []).map((item) => (
+                    <Option
+                      key={item?.id}
+                      onClick={() => handleClickOption(item)}
+                    >
+                      {item?.name}
+                    </Option>
+                  ))}
+              </List>
             </Dropdown>
+
+            {selectedCategory.name && (
+              <span className="inline-block p-4 rounded-lg bg-green-100 text-sm text-green-600 font-medium">
+                {selectedCategory.name}
+              </span>
+            )}
           </Field>
+
           <Field>
             <Label>Author</Label>
             <Input
@@ -116,6 +165,7 @@ const PostAddNew = () => {
             ></Input>
           </Field>
         </div>
+
         <div className="grid grid-cols-2 gap-x-10 mb-10">
           <Field>
             <Label>Feature post</Label>
@@ -124,6 +174,7 @@ const PostAddNew = () => {
               onClick={() => setValue("hot", !watchHot)}
             ></Toggle>
           </Field>
+
           <Field>
             <Label>Status</Label>
             <div className="flex items-center gap-x-5">
@@ -157,6 +208,7 @@ const PostAddNew = () => {
             </div>
           </Field>
         </div>
+
         <Button type="submit" className="mx-auto">
           Add new post
         </Button>
